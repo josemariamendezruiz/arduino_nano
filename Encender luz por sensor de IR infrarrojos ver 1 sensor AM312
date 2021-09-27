@@ -7,8 +7,8 @@
   
  // DECLARAMOS LAS VARIABLES QUE INDICAN LOS PINES QUE VAMOS A UTILIZAR
  
-int sensorpir = 5;              // Pin del salida del sensor que está como salida.
-int led = 2;                    // Puedes conectar un LED en el 13 para ver el efecto visual cuando se activa al detectar presencia
+int sensorpir = 5;              // Pin de entrada de la salida del sensor que indica cuando detecta movimiento
+int led = 2;                    // Pin de salida de nuestro nano para controlar lo que queremos cuando recibimos señal de movimiento del sensor
 int led_calibrado  = 3;         // Este led parpadeará mientras el sensor se está calibrando
 int tiempo_calibracion = 30;    // Este tiempo es el que necesia el sensor cuando se enciende por primera vez, este valor está en el datasheet ( hoja de especificacione del fabricante )
 
