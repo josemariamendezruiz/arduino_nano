@@ -1,0 +1,37 @@
+/*
+    LUZ PORTAL CON SENSOR PIR INFRARROJOS
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+*/
+  // DECLARAMOS LOS PINES
+  int sensorpir = 5;               // Para el pin que controlará el sensor PIR al detectar movimiento
+  int luz_portal  = 2;             // Para el pin que controlará el relé
+  int led_calibrado  = 3;          // Este led parpadeará mientras el sensor se está calibrando
+  int tiempo_calibracion = 10;     // Este tiempo es el que necesia el sensor cuando se enciende por primera vez, este valor está en el datasheet ( hoja de especificacione del fabricante )
+  int j;                           // variable para bucles
+  int tiempo = 10;                 // Para indicar cuantos segundos estara encendida la luz del portal 
+
+void setup() {
+  
+  // Declaramos los pines que vamos a utilizar y el tipo que van a tener dichos pines
+  pinMode(luz_portal, OUTPUT);      
+  pinMode(sensorpir, INPUT);      
+  
+  // ENCENDEMOS EL LED DE ESTA CALIBRANDO Y ESPERAMOS EL TIEMPO INDICADO POR EL FABRICANTE
+  digitalWrite(led_calibrado, HIGH);
+  for(j=0; j<tiempo_calibracion; j++){
+    delay(1000);
+  }
+  digitalWrite(led_calibrado, LOW); // Apago el led de calibracion y ya se puede usar el sensor
+  digitalWrite(luz_portal,LOW);     //apagamos por si estuviera encendida para inicializar el programa
+}
+
+void loop() {
+   if (digitalRead(sensorpir) == HIGH)
+   {
+      digitalWrite(luz_portal,HIGH);    //activamos el pin que controla el relé para que encienda la luz del portal
+      delay(tiempo * 1000);             //esperamos x segundos indicados , multiplicamos por 1000 para que lo mida en segundos
+      digitalWrite(luz_portal,LOW);     //apagamos el pin que controla el relé para que encienda la luz del portal
+   }
+}
