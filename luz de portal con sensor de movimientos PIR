@@ -16,6 +16,7 @@ void setup() {
   
   // Declaramos los pines que vamos a utilizar y el tipo que van a tener dichos pines
   pinMode(luz_portal, OUTPUT);      
+  pinMode(led_calibrado, OUTPUT);      
   pinMode(sensorpir, INPUT);      
   
   // ENCENDEMOS EL LED DE ESTA CALIBRANDO Y ESPERAMOS EL TIEMPO INDICADO POR EL FABRICANTE
