@@ -6,7 +6,7 @@
     CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
 */
   // DECLARAMOS LOS PINES
-  int sensor = 4;                  // Para el pin que controlará el sensor de audio
+  int sensor = 4;                  // Para el pin que controlará el sensor
   int salida  = 2;                 // Para el pin que controlará el relé
   int tiempo = 1;                  // Para indicar cuantos segundos estara encendida la salida
 
