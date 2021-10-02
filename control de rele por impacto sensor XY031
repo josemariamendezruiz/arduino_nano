@@ -1,0 +1,29 @@
+
+/*
+    CONTROL DE UN RELE CON UN SENSOR DE IMPACTO, SENSOR KY-031
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+*/
+  // DECLARAMOS LOS PINES
+  int sensor = 4;                  // Para el pin que controlará el sensor de audio
+  int salida  = 2;                 // Para el pin que controlará el relé
+  int tiempo = 1;                  // Para indicar cuantos segundos estara encendida la salida
+
+void setup() {
+  
+  // Declaramos los pines que vamos a utilizar y el tipo que van a tener dichos pines
+  pinMode(salida, OUTPUT);      
+  pinMode(sensor, INPUT);      
+}
+
+void loop() {
+   
+   if (digitalRead(sensor) == HIGH)
+   {
+      digitalWrite(salida,HIGH);       // apagamos el pin que controla el relé
+      delay(tiempo * 1000);            // indicamos cuanto tiempo va a estar encendido el led o relé
+   }else{
+      digitalWrite(salida,LOW);        // activamos el pin que controla el relé 
+   }
+}
