@@ -1,0 +1,24 @@
+/*
+    REGULAR LA LUZ DE UN LED CON UN POTENCIOMETRO
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+*/
+
+// DECLARAMOS LAS VARIABLES QUE INDICAN LOS PINES QUE VAMOS A UTILIZAR
+int pot = 0;     // Para el pin que controlará el valor del potenciometro
+int led = 3;     // Para el pin de salida al led, hay que usar una salida PWM
+int leo_pot;     // Para la lectura el valor del potenciómetro
+int brillo ;     // Para el brillo que se le dará al led
+
+// DECLARAMOS LOS PÌNES QUE VAMOS A UTILIZAR, EXCEPTO EL ANALÓGICO
+void setup() {
+  pinMode(led, OUTPUT );
+}
+
+void loop(){
+  leo_pot = analogRead(pot); // leo el valor del potenciómetro 
+  brillo = map( leo_pot, 0, 1023, 0, 255 );  // ajustamos el valor del potenciometro al del analogwrite
+  analogWrite(led, brillo); // le enviamos el valor del brillo para el led
+  delay(30);   // esperamos antes de volver a leer el valor analógico del potenciómetro
+}
