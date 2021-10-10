@@ -1,0 +1,42 @@
+/*
+    CONTROL DEL SENTIDO DE GIRO Y REGULAR VELOCIDAD DE UN MOTOR CON UN POTENCIOMETRO
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+*/
+
+// DECLARAMOS LAS VARIABLES QUE INDICAN LOS PINES QUE VAMOS A UTILIZAR
+int pot = 0;                   // Para el pin que controlará el valor del potenciometro
+int leo_pot;                   // Para la lectura el valor del potenciómetro
+int interruptor_sentido = 3;   // Para el pin de entrada del interruptor que selecciona el sentido del giro del motor
+int motor_sentido = 2;         // Para el pin de salida que indica el giro  
+int motor_salida = 5;          // Para el pin de salida que controla el motor
+int velocidad;                 // Para la velocidad del motor
+int sentido = 0;               // Para indicar hacia donde queremos que gire el motor, en sentido de agujas del reloj o al contrario
+
+
+// DECLARAMOS LOS PÌNES QUE VAMOS A UTILIZAR, EXCEPTO EL ANALÓGICO
+void setup() {
+  pinMode(motor_sentido, OUTPUT );
+  pinMode(motor_salida, OUTPUT );
+  pinMode(interruptor_sentido, INPUT ); // para leer el interruptor y saber hacia donde queremos que gire el motor
+  
+  digitalWrite(motor_sentido, LOW); //  Ponemos el sentido a 0  , si lo ponemos a 1 girara en el sentido contrario
+  digitalWrite(motor_salida, LOW); //  Ponemos la velocidad a 0
+}
+
+void loop(){
+  leo_pot = analogRead(pot); // leo el valor del potenciómetro 
+  sentido = digitalRead(interruptor_sentido); //  leemos el valor del interruptor que indica el sentido del giro del motor
+
+  velocidad = map( leo_pot, 0, 1023, 0, 255 );  // ajustamos por defecto para un sentido de giro el valor del potenciometro al del analogwrite  
+
+  if (sentido == LOW){
+    velocidad = map( leo_pot, 1023, 0, 0, 255 );  // si cambia se sentido de giro, cambiamos la conversion del valor del potenciometro
+  }
+
+  digitalWrite(motor_sentido, sentido); //  Ponemos el sentido de giro indicado por el interruptor
+  analogWrite(motor_salida, velocidad); // le enviamos el valor de la velocidad al driver que maneja el motor
+  
+  delay(30);   // esperamos antes de volver a leer el valor analógico del potenciómetro
+}
