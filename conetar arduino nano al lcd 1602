@@ -1,23 +1,37 @@
 /*
-    CONECTAR NUESTRO ARDUINO NANO A LA PANTALLA DE CRISTAL LCD1602A
+    CONECTAR NUESTRO ARDUINO NANO A LA PANTALLA LCD 1602A
     AUTOR : JOSE MARIA MENDEZ RUIZ
 
     CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
 */
 
+
+/*               ********* CONEXIONES DESDE EL LCD HASTA NUESTRO ARDUINO NANO *********************
+ *               ********* RECUERDA QUE TIENEN QUE SER LOS PINES PWM DEL ARDUINO NANO *************
+ *               
+ *   PINES DEL ARDUINO NANO             PINES DEL LCD 
+ *             D3                          4  (RS)
+ *             D5                          6  (E)
+ *             D6                          11 (D4)  
+ *             D9                          12 (D5)
+ *             D10                         13 (D6)
+ *             D11                         14 (D7)
+ */
+
+ 
 #include <LiquidCrystal.h>  // incluimos la libreria que maneja la pantalla LCD
 LiquidCrystal lcd(3, 5, 6, 9, 10, 11); // le indicamos los pines que vamos a utilizar de nuestro arduino nano hacia el lcd, tienen que ser PWM, por lo que tenemos que usar todos los pines que tiene el arduino nano de salidas Digitales que son PWM
 
 
 // DECLARAMOS LAS VARIABLES QUE INDICAN LOS PINES QUE VAMOS A UTILIZAR
 String frase;                  // Para la frase que queremos mostrar en el lcd
+String espacios;               // Para calcular la columna, le añadimos espacios en blanco delante de la frase
 int linea = 0;                 // Para la linea donde vamos a escribir
 int linea_;                    // Para la linea donde vamos a escribir
 int columna = 0;               // Para la columna de la linea donde vamos a escribir
 int total_lineas = 2;          // Para indicar cuantas lineas tiene nuestro lcd
 int total_columnas = 16;       // Para indicar cuantas columnas tiene nuestro lcd
 int i =0 ;                     // Variable para bucles
-String espacios;               // Para calcular la columna, le añadimos espacios en blanco delante de la frase
 
 void setup() {
     lcd.begin(total_columnas, total_lineas);       // indicamos cuantos caracteres y lineas tiene nuestro lcd
@@ -25,13 +39,13 @@ void setup() {
     linea = 0; linea_ = 0;                         // Para escribir en la primera linea
     columna = 5;                                   // Para escribir en la columna que queremos
     frase = col(columna) + "Hola Mundo";           // la frase que queremos mostrar en el lcd, llamamos a la funcion col para indicarle en que columna queremos mostrar el texto
-    lcd.setCursor(linea,linea_);                   // Ponemos le cursor donde queremos que muestre el texto
+    lcd.setCursor(linea,linea_);                   // Ponemos el cursor en la linea donde queremos que muestre el texto
     lcd.write(frase.c_str());                      // escribimos la frase, usamos c_str por que el lcd necesita que le envien el texto en const char*, c_str convierte la cadena frase a const char*
 
     linea = 0; linea_ = 1;                         // Para escribir en la segunda linea
     columna = 0;                                   // Para escribir en la columna que queremos
     frase = col(columna) + "Hello Word";           // la frase que queremos mostrar en el lcd, llamamos a la funcion col para indicarle en que columna queremos mostrar el texto
-    lcd.setCursor(linea,linea_);                   // Ponemos le cursor donde queremos que muestre el texto
+    lcd.setCursor(linea,linea_);                   // Ponemos el cursor en la linea donde queremos que muestre el texto
     lcd.write(frase.c_str());                      // escribimos la frase, usamos c_str por que el lcd necesita que le envien el texto en const char*, c_str convierte la cadena frase a const char*
 }
 
