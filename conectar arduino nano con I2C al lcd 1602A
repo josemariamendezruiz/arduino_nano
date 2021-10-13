@@ -1,0 +1,62 @@
+/*
+    CONECTAR NUESTRO ARDUINO NANO A LA PANTALLA LCD 1602A UTILIZANDO UN MODULO I2C
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+
+    UTILIZO LA LIBRERIA DE I2C, DE AHI MISMO LA PODEIS DESCARGAR E INSTALAR COMO SE INDICA EN DICHA WEB
+    LiquidCrystal_I2C: https://github.com/fdebrabander/Arduino-LiquidCrystal-I2C-library.  
+
+    
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+*/
+
+/*               ********* CONEXIONES DESDE EL LCD HASTA NUESTRO ARDUINO NANO *********************
+ *               
+ *   PINES DEL ARDUINO NANO             PINES DEL MODULO I2C 
+ *             A4                              SDA
+ *             A5                              SDL
+ *  LA DIRECCION SE ASIGNA CON LOS PUENTES QUE TIENE LA PLACA DEL MODULO, SI OS FIJAIS LOS VEREIS DEBAJO DE LA RESISTENCIA AJUSTABLE, A LA IZQUIERDA DEL PIN SDL , HAY UNOS PUENTES NORMALMENTE ABIERTOS ( PONE A0 , A1, A2 )
+ *   A0 - A1 - A2   <  A ES ABIERTO ;  C ES CERRADO ES DECIR CON UN PUENTE DE SOLDADURA
+ *   C    C    C = 0x20
+ *   C    C    A = 0x21
+ *   C    A    C = 0x22
+ *   C    A    A = 0x23
+ *   A    C    C = 0x24
+ *   A    C    A = 0x25
+ *   A    A    C = 0x26
+ *   A    A    A = 0x27
+ */
+ 
+
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+
+// DECLARAMOS LAS VARIABLES QUE INDICAN LOS PINES QUE VAMOS A UTILIZAR
+String frase;                  // Para la frase que queremos mostrar en el lcd
+int linea ;                    // Para la linea donde vamos a escribir
+int columna ;                  // Para la columna de la linea donde vamos a escribir
+int total_lineas = 2;          // Para indicar cuantas lineas tiene nuestro lcd
+int total_columnas = 16;       // Para indicar cuantas columnas tiene nuestro lcd
+
+LiquidCrystal_I2C lcd_i2c(0x27, total_columnas, total_lineas); // indicamos cuantos caracteres y lineas tiene nuestro lcd
+
+
+
+void setup() {
+// initialize the LCD
+  lcd_i2c.begin();
+  lcd_i2c.backlight();
+
+  linea = 0; columna = 5;
+  frase = "Hola Mundo";
+  lcd_i2c.setCursor(columna, linea);
+  lcd_i2c.print(frase.c_str());
+
+  linea = 1; columna = 0;
+  frase = "Hello World";
+  lcd_i2c.setCursor(columna, linea);
+  lcd_i2c.print(frase.c_str());
+}
+
+void loop(){
+  
+}
