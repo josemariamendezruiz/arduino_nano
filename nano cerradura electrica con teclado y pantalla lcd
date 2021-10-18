@@ -129,7 +129,7 @@ void loop() {
         lcd_i2c.clear(); // Limpiamos el LCD para escribir el resultado
         guarda_teclas = ""; // Borramos lo que se ha escrito hasta entonces para empezar de nuevo
         linea = 0; columna = 0;
-        frase = "Introduzca Pass y pulse #";
+        frase = "Indique Pass y #";
         lcd_i2c.setCursor(columna, linea);
         lcd_i2c.print(frase);
         digitalWrite(pin_ok, LOW);    // Iniciamos de nuevo la salida
