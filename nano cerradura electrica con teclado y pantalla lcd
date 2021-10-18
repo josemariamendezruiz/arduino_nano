@@ -1,0 +1,139 @@
+/*
+    CERRADURA CON TECLADO Y PANTALLA LCD
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+
+    UTILIZO LA LIBRERIA DE I2C, DE AHI MISMO LA PODEIS DESCARGAR E INSTALAR COMO SE INDICA EN DICHA WEB
+    LiquidCrystal_I2C: https://github.com/fdebrabander/Arduino-LiquidCrystal-I2C-library.  
+    
+    Keypad:  https://github.com/Chris--A/Keypad
+
+    
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+*/
+
+/*               ********* CONEXIONES DESDE EL LCD HASTA NUESTRO ARDUINO NANO *********************
+ *               
+ *   PINES DEL ARDUINO NANO             PINES DEL MODULO I2C 
+ *             A4                              SDA
+ *             A5                              SDL
+ *  LA DIRECCION SE ASIGNA CON LOS PUENTES QUE TIENE LA PLACA DEL MODULO, SI OS FIJAIS LOS VEREIS DEBAJO DE LA RESISTENCIA AJUSTABLE, A LA IZQUIERDA DEL PIN SDL , HAY UNOS PUENTES NORMALMENTE ABIERTOS ( PONE A0 , A1, A2 )
+ *   A0 - A1 - A2   <  A ES ABIERTO ;  C ES CERRADO ES DECIR CON UN PUENTE DE SOLDADURA
+ *   C    C    C = 0x20
+ *   C    C    A = 0x21
+ *   C    A    C = 0x22
+ *   C    A    A = 0x23
+ *   A    C    C = 0x24
+ *   A    C    A = 0x25
+ *   A    A    C = 0x26
+ *   A    A    A = 0x27
+ */
+ 
+
+#include <Keypad.h>
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+ 
+// DECLARAMOS LAS VARIABLES QUE INDICAN LOS PINES QUE VAMOS A UTILIZAR
+String frase;                  // Para la frase que queremos mostrar en el lcd
+String pass;                   // Donde guardaremos la password que queremos 
+String guarda_teclas;          // Donde iremos guardando lo que se vaya pulsando hasta darle a la # que hará de Enter ( Intro )
+int linea ;                    // Para la linea donde vamos a escribir
+int columna ;                  // Para la columna de la linea donde vamos a escribir
+int total_lineas = 2;          // Para indicar cuantas lineas tiene nuestro lcd
+int total_columnas = 16;       // Para indicar cuantas columnas tiene nuestro lcd
+int pin_ok = 13;               // Declaramos el PIN de salida del nano cuando la pass es correcta
+int pin_no_ok = 12;            // Declaramos el PIN de salida del nano cuando la pass NO es correcta
+
+const byte rowsCount = 4;
+const byte columsCount = 4;
+ 
+char keys[rowsCount][columsCount] = {
+   { '1','2','3', 'A' },
+   { '4','5','6', 'B' },
+   { '7','8','9', 'C' },
+   { '*','0','#', 'D' }
+};
+ 
+const byte rowPins[rowsCount] = { 11, 10, 9, 8 };
+const byte columnPins[columsCount] = { 7, 6, 5, 4 };
+ 
+Keypad keypad = Keypad(makeKeymap(keys), rowPins, columnPins, rowsCount, columsCount);
+
+LiquidCrystal_I2C lcd_i2c(0x27, total_columnas, total_lineas); // indicamos cuantos caracteres y lineas tiene nuestro lcd
+ 
+void setup() {
+  // Declaramos los pines de salida 
+  digitalWrite(pin_ok, OUTPUT);
+  digitalWrite(pin_no_ok, OUTPUT);
+ 
+  // initialize the LCD
+  lcd_i2c.begin();
+  lcd_i2c.backlight();
+  lcd_i2c.clear();
+  
+  guarda_teclas = "";   // Declaramos vacia la variable que guarda las teclas que se vayan pulsado
+  pass = "66724432" ;   // Declaramos la password que queremos utilizar para abrir la puerta
+
+  // Escribimos en el LCD la primera frase pidiendo que se pulse la pass
+  linea = 0; columna = 0;
+  frase = "Indique Pass y #";
+  lcd_i2c.setCursor(columna, linea);
+  lcd_i2c.print(frase);
+  digitalWrite(pin_ok, LOW); // iniciamos la salida a LOW
+  digitalWrite(pin_no_ok, LOW); // iniciamos la salida a LOW
+}
+ 
+void loop() {
+   char key = keypad.getKey();
+ 
+   if (key) {
+      if (key != '#' ){
+        guarda_teclas = guarda_teclas + key;
+        linea = 1; columna = 0;
+        lcd_i2c.setCursor(columna, linea);
+        lcd_i2c.print(guarda_teclas);
+      }
+
+      // La tecla # hace la función de Enter ( Intro )
+      if (key == '#' ){
+        lcd_i2c.clear(); // Limpiamos el LCD para escribir el resultado
+        // Si la pass introducida es correcta
+
+        if (guarda_teclas == pass){
+          linea = 1; columna = 0;
+          frase = "PASSWORD OK,PASE";
+          lcd_i2c.setCursor(columna, linea);
+          lcd_i2c.print(frase);
+          digitalWrite(pin_ok, HIGH); // activamos la salida , para encender el led de correcto y activar el relé
+          delay (5000); // Esperamos 5 segundos para que se abra la puerta 
+        }
+        
+        // Si la pass introducida NO es correcta
+        if (guarda_teclas != pass){
+
+          frase = "!!!! ERROR !!!!!";
+          linea = 0; columna = 0;
+          lcd_i2c.setCursor(columna, linea);
+          lcd_i2c.print(frase);     
+            
+          frase = " PASSWORD NO OK ";
+          linea = 1; columna = 0;
+          lcd_i2c.setCursor(columna, linea);
+          lcd_i2c.print(frase);       
+
+          digitalWrite(pin_no_ok, HIGH); // Encedemos el led de error
+          delay (5000); // Esperamos 5 segundos para que empiece de nuevo
+        }
+
+        // Volvemos a escribimos en el LCD la primera frase pidiendo que se pulse la pass
+        lcd_i2c.clear(); // Limpiamos el LCD para escribir el resultado
+        guarda_teclas = ""; // Borramos lo que se ha escrito hasta entonces para empezar de nuevo
+        linea = 0; columna = 0;
+        frase = "Introduzca Pass y pulse #";
+        lcd_i2c.setCursor(columna, linea);
+        lcd_i2c.print(frase);
+        digitalWrite(pin_ok, LOW);    // Iniciamos de nuevo la salida
+        digitalWrite(pin_no_ok, LOW); // Iniciamos de nuevo la salida
+      }    
+   }
+}
