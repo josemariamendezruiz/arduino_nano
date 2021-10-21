@@ -1,0 +1,113 @@
+/*
+    CONTROL DE LUZ DE PORTAL INDEPENDIENTE POR PLANTA
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+    FECHA : OCTUBRE 2021
+
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+*/
+  // DECLARAMOS LAS VARIABLES QUE INDICAN LOS PINES QUE VAMOS A UTILIZAR
+  int rele1_pulsador =  10;               // Para el pin que controlará el pulsador del relé 1 
+  int rele1_activador = 2;                // Para el pin que controlará el relé 1
+  int tiempo_rele1 = 10;                  // Esta variable la utilizamos para indicar los segundos que estará activo el relé
+  int tiempo_fin1;                        // Esta variable me indica cuando apagar el rele pasados los segundos indicados
+  
+  int rele2_pulsador =  11;               // Para el pin que controlará el pulsador del relé 2 
+  int rele2_activador = 3;                // Para el pin que controlará el relé 2
+  int tiempo_rele2 = 5;                   // Esta variable la utilizamos para indicar los segundos que estará activo el relé
+  int tiempo_fin2;                        // Esta variable me indica cuando apagar el rele pasados los segundos indicados
+
+  int rele3_pulsador =  12;               // Para el pin que controlará el pulsador del relé 3 
+  int rele3_activador = 4;                // Para el pin que controlará el relé 3
+  int tiempo_rele3 = 5;                   // Esta variable la utilizamos para indicar los segundos que estará activo el relé
+  int tiempo_fin3;                        // Esta variable me indica cuando apagar el rele pasados los segundos indicados
+
+  int tiempo_actual;                       // Esta variable la utilizamos para tener el tiempo de millis / 1000 para tener los segundos que van pasando
+  
+  
+void setup() {
+  
+  // Declaramos los pines que vamos a utilizar y el tipo que van a tener dichos pines
+  pinMode(rele1_activador, OUTPUT);      // Para activar el rele 1
+  pinMode(rele1_pulsador, INPUT);       // Para leer el interruptor que activa el rele 1
+
+  pinMode(rele2_activador, OUTPUT);      // Para activar el rele 2
+  pinMode(rele2_pulsador, INPUT);       // Para leer el interruptor que activa el rele 2
+
+  pinMode(rele3_activador, OUTPUT);      // Para activar el rele 3
+  pinMode(rele3_pulsador, INPUT);       // Para leer el interruptor que activa el rele 3
+
+  digitalWrite(rele1_activador,LOW);     //apagamos las salida para inicializar el programa rele 1
+  digitalWrite(rele2_activador,LOW);     //apagamos las salida para inicializar el programa rele 2
+  digitalWrite(rele3_activador,LOW);     //apagamos las salida para inicializar el programa rele 3
+
+  tiempo_fin1 = 0; // inciamos las variables
+  tiempo_fin2 = 0; // inciamos las variables
+  tiempo_fin3 = 0; // inciamos las variables
+}
+
+void loop() {
+
+  tiempo_actual = millis()/1000;         // sacamos el tiempo en segundos, la usamos para poder controlar los segundos sin bloquear al procesador como hace el delay
+
+  // PARA EL PULSADOR 1 
+  if (digitalRead(rele1_pulsador) == 1){
+   /* si queremos que el pulsador ignore que se pulsa mientras este encendida 
+   *  cambiamos la linea if anterior por esta 
+   *  if ( (digitalRead(rele1_pulsador) == 1) && (tiempo_fin1 <= tiempo_actual) ){
+   */ 
+    tiempo_fin1 = tiempo_actual + tiempo_rele1; // calculamos el tiempo que tiene que pasar encendida
+  }
+  
+  // PARA EL PULSADOR 2
+  if (digitalRead(rele2_pulsador) == 1){
+   /* si queremos que el pulsador ignore que se pulsa mientras este encendida 
+   *  cambiamos la linea if anterior por esta 
+   *  if ( (digitalRead(rele2_pulsador) == 1) && (tiempo_fin2 <= tiempo_actual) ){
+   */ 
+    tiempo_fin2 = tiempo_actual + tiempo_rele2;
+  }
+
+  // PARA EL PULSADOR 3
+  if (digitalRead(rele3_pulsador) == 1){
+   /* si queremos que el pulsador ignore que se pulsa mientras este encendida 
+   *  cambiamos la linea if anterior por esta 
+   *  if ( (digitalRead(rele3_pulsador) == 1) && (tiempo_fin3 <= tiempo_actual) ){
+   */ 
+    tiempo_fin3 = tiempo_actual + tiempo_rele3;
+  }
+
+  if (tiempo_fin1 > tiempo_actual ){
+    digitalWrite(rele1_activador, HIGH);    // encendemos el relé
+  }else{  
+    digitalWrite(rele1_activador, LOW);    // cuando pase el tiempo apaga el rele 1
+  }
+  
+  if (tiempo_fin2 > tiempo_actual ){
+    digitalWrite(rele2_activador, HIGH);    // encendemos el relé
+  }else{  
+    digitalWrite(rele2_activador, LOW);    // cuando pase el tiempo apaga el rele 2
+  }
+  
+  if (tiempo_fin3 > tiempo_actual ){
+    digitalWrite(rele3_activador, HIGH);    // encendemos el relé
+  }else{  
+    digitalWrite(rele3_activador, LOW);    // cuando pase el tiempo apaga el rele 3
+  }
+
+
+  // EL CONTADOR MILLS TIENE UN LIMITE, DE FORMA QUE AL LLEGAR AL MISMO SE DESBORDA Y EMPIEZA DE CERO
+  // PUEDE DARSE LA CONINCIDENCIA QUE EN DICHO MOMENTO ALGUIEN ENCIENDA UNA LUZ, EN ESE CASO LA LUZ NO SE APAGARIA NUNCA
+  // PARA ESTOS CASOS , PONEMOS ESTAS LINEAS 
+  if (tiempo_fin1 > (tiempo_actual + 500) ){  // 500 segundos es por que no creo que nadie ponga que la luz se quede encendida 500 segundos, si fuera asi poner 1000 o 2000 segundos
+    tiempo_fin1 = tiempo_actual + tiempo_rele1;
+  }  
+  if (tiempo_fin2 > (tiempo_actual + 500) ){  // 500 segundos es por que no creo que nadie ponga que la luz se quede encendida 500 segundos, si fuera asi poner 1000 o 2000 segundos
+    tiempo_fin2 = tiempo_actual + tiempo_rele2;
+  }  
+  if (tiempo_fin3 > (tiempo_actual + 500) ){  // 500 segundos es por que no creo que nadie ponga que la luz se quede encendida 500 segundos, si fuera asi poner 1000 o 2000 segundos
+    tiempo_fin3 = tiempo_actual + tiempo_rele3;
+  }  
+  
+
+  
+}
