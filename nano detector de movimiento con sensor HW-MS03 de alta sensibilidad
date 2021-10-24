@@ -1,0 +1,35 @@
+/*
+    DETECTOR DE MOVIMIENTOS POR RADAR DE ALTA SENSIBILIDAD CON SENSOR HW-MS03
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+    FECHA : OCTUBRE 2021
+
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+*/
+  // DECLARAMOS LAS VARIABLES QUE INDICAN LOS PINES QUE VAMOS A UTILIZAR
+  int radar =  0;                         // Para el pin analógico que controlará el estado del radar
+  int lectura_radar;                      // Para el valor que recibimos del sensor del radar
+  int salida = 3;                         // Para el pin que activará si el radar indica movimiento
+  int tiempo;                             // Cuanto tiempo estará la salida activa
+  
+  
+void setup() {
+  
+  // Declaramos los pines que vamos a utilizar y el tipo que van a tener dichos pines
+  pinMode(salida, OUTPUT);              // Para activar la salida
+
+  digitalWrite(salida,LOW);             // ponemos la salida para inicializar el pin
+  tiempo = 2;                           // inciamos la variable con el tiempo en segundos que queremos este activa la salida
+}
+
+void loop() {
+
+  lectura_radar = analogRead(radar);           // leo lo que el radar está enviando , es una lectura analógica
+
+  if (lectura_radar > 5){            //  Aqui indicamos como de sensible queremos que sea, cuanto mayor sea el número menor será la sensibilidad, es decir a los movimientos, esto es a tener en cuenta si hay animales domésticos  
+    digitalWrite(salida, HIGH);      //  Activamos el pin de salida por que ha habido movimiento
+    delay (tiempo*1000) ;            //  Esperamos el tiempo indicado que estará activa la salida
+    digitalWrite(salida, LOW);       //  Apagamos el pin de salida 
+  }
+
+ 
+}
