@@ -1,0 +1,64 @@
+/*
+    LECTURA DE TEMPERATURA Y HUMEDAD MEDIANTE EL SENSOR ATH-10 Y MUESTRA EN PANTALLA LCD 
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+    FECHA : OCTUBRE 2021
+
+    Libreria del sensor de humedad y temperatura AHT10
+    https://github.com/enjoyneering/AHT10
+
+    Libreria del I2C que maneja el LCD , LiquidCrystal_I2C
+    https://github.com/fdebrabander/Arduino-LiquidCrystal-I2C-library.
+    
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+*/
+
+
+#include <Adafruit_AHTX0.h>  // Incluimos la libreria necesaria para manejar el sensor
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+
+
+// DECLARAMOS LAS VARIABLES QUE INDICAN LOS PINES QUE VAMOS A UTILIZAR
+// TODO LO HACEMOS MEDIANTE EL CANAL I2C
+
+String frase;                  // Para la frase que queremos mostrar en el lcd
+int linea ;                    // Para la linea donde vamos a escribir
+int columna ;                  // Para la columna de la linea donde vamos a escribir
+int total_lineas = 2;          // Para indicar cuantas lineas tiene nuestro lcd
+int total_columnas = 16;       // Para indicar cuantas columnas tiene nuestro lcd
+
+Adafruit_AHTX0 aht;                                            // Asigamos el sensor 
+LiquidCrystal_I2C lcd_i2c(0x27, total_columnas, total_lineas); // indicamos cuantos caracteres y lineas tiene nuestro lcd
+
+
+void setup(){
+    // Incializamos la pantalla LCD
+    lcd_i2c.begin();
+    lcd_i2c.backlight();
+    lcd_i2c.clear();
+    // NOS ASEGURAMOS QUE ESTA PRESENTE EL MODULO AHT10 SI NO ES ASI, EL BUCLE NO CONTINUARA LA CARGA
+    if (! aht.begin()) {      // Iniciamos el sensor
+             while (1) delay(10);
+    }
+
+}
+
+void loop() {
+    
+   
+    sensors_event_t humedad, temperatura;
+    aht.getEvent(&humedad, &temperatura);// populate temp and humidity objects with fresh data
+    
+     
+    frase = "Temp.: " + String(temperatura.temperature) + " " + (char)223 + "C"; // CON ESTO (char)223 APARECE EL SIMBOLO DE º GRADOS EN EL LCD
+    linea = 0; columna = 0;
+    lcd_i2c.setCursor(columna, linea);
+    lcd_i2c.print(frase);
+
+    frase = "Hum. : " + String (humedad.relative_humidity) + " %rH";
+    linea = 1; columna = 0;
+    lcd_i2c.setCursor(columna, linea);
+    lcd_i2c.print(frase);     
+
+    delay(500);
+}
