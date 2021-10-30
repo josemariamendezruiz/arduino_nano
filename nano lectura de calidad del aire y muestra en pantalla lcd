@@ -1,0 +1,59 @@
+/*
+    LECTURA DE TEMPERATURA Y HUMEDAD MEDIANTE EL SENSOR ATH-10 Y MUESTRA EN PANTALLA LCD 
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+    FECHA : OCTUBRE 2021
+
+    Libreria del I2C que maneja el LCD , LiquidCrystal_I2C
+    https://github.com/fdebrabander/Arduino-LiquidCrystal-I2C-library.
+    
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+
+    Los valores de co2 recomendados en interiores son:
+    
+    Hasta 350 ppm:                Alta calidad de aire 
+    Entre 500 y 800 ppm:          Moderada calidad de aire 
+    Entre 800 y 1200 ppm:         Baja calidad de aire 
+    Nivel superior a 1200 ppm:    Mala calidad de aire 
+    
+*/
+
+ 
+#include <LiquidCrystal_I2C.h>
+
+
+// DECLARAMOS LAS VARIABLES QUE INDICAN LOS PINES QUE VAMOS A UTILIZAR
+// TODO LO HACEMOS MEDIANTE EL CANAL I2C
+
+String frase;                  // Para la frase que queremos mostrar en el lcd
+int linea ;                    // Para la linea donde vamos a escribir
+int columna ;                  // Para la columna de la linea donde vamos a escribir
+int ventilador = 13;           // Pin de salida digital para activar el ventilador, usando esta salida podemos aprovechar el led que tiene el arduino nano y ver como se activa
+int salto_ventilador = 160;    // Para establecer cuando queremos que se active el ventilador o extractor 
+int total_lineas = 2;          // Para indicar cuantas lineas tiene nuestro lcd
+int total_columnas = 16;       // Para indicar cuantas columnas tiene nuestro lcd
+
+LiquidCrystal_I2C lcd_i2c(0x27, total_columnas, total_lineas); // indicamos cuantos caracteres y lineas tiene nuestro lcd
+
+
+void setup(){
+    // Incializamos la pantalla LCD
+    lcd_i2c.begin();
+    lcd_i2c.backlight();
+    lcd_i2c.clear();
+}
+
+void loop() {        
+    int valor_MQ = analogRead(A0); //Lemos el valor analógico que nos envia el sensor MQ, los valores recomendados de co2 estan entre 300 y 800 ppm, más de 800 es peligroso
+    frase = "CO2: " + String(valor_MQ) + " PPM";
+    linea = 0; columna = 0;
+    lcd_i2c.setCursor(columna, linea);
+    lcd_i2c.print(frase);
+    delay(500);    
+    
+    // Controlamos el valor enviado por el sensor para que cuando llegue al valor que le indicamos active el ventilador o extractor de aire
+    if ( valor_MQ > salto_ventilador){
+      digitalWrite(ventilador,HIGH);       //Encendemos el ventilador
+    }else{
+      digitalWrite(ventilador,LOW);        //Apagamos el ventilador      
+    }
+}
