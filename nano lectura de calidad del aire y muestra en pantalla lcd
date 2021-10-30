@@ -1,5 +1,5 @@
 /*
-    LECTURA DE TEMPERATURA Y HUMEDAD MEDIANTE EL SENSOR ATH-10 Y MUESTRA EN PANTALLA LCD 
+    LECTURA DE CALIDAD DEL ARIRE Y MUESTRA EN PANTALLA LCD
     AUTOR : JOSE MARIA MENDEZ RUIZ
     FECHA : OCTUBRE 2021
 
@@ -17,7 +17,7 @@
     
 */
 
- 
+
 #include <LiquidCrystal_I2C.h>
 
 
@@ -27,8 +27,6 @@
 String frase;                  // Para la frase que queremos mostrar en el lcd
 int linea ;                    // Para la linea donde vamos a escribir
 int columna ;                  // Para la columna de la linea donde vamos a escribir
-int ventilador = 13;           // Pin de salida digital para activar el ventilador, usando esta salida podemos aprovechar el led que tiene el arduino nano y ver como se activa
-int salto_ventilador = 160;    // Para establecer cuando queremos que se active el ventilador o extractor 
 int total_lineas = 2;          // Para indicar cuantas lineas tiene nuestro lcd
 int total_columnas = 16;       // Para indicar cuantas columnas tiene nuestro lcd
 
@@ -48,12 +46,5 @@ void loop() {
     linea = 0; columna = 0;
     lcd_i2c.setCursor(columna, linea);
     lcd_i2c.print(frase);
-    delay(500);    
-    
-    // Controlamos el valor enviado por el sensor para que cuando llegue al valor que le indicamos active el ventilador o extractor de aire
-    if ( valor_MQ > salto_ventilador){
-      digitalWrite(ventilador,HIGH);       //Encendemos el ventilador
-    }else{
-      digitalWrite(ventilador,LOW);        //Apagamos el ventilador      
-    }
+    delay(500);         
 }
