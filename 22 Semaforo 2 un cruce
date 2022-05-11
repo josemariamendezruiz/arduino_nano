@@ -1,0 +1,78 @@
+/*
+    SEMAFORO
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+*/
+  // DECLARAMOS LOS PINES PARA EL SEMAFORO 1
+  int semaforo1_rojo = 10;     // Para el led rojo
+  int semaforo1_amarillo = 9;  // Para el led amarillo
+  int semaforo1_verde = 8;     // Para el led verde
+  // DECLARAMOS LOS PINES PARA EL SEMAFORO 2
+  int semaforo2_rojo = 5;      // Para el led rojo
+  int semaforo2_amarillo = 4;  // Para el led amarillo
+  int semaforo2_verde = 3;     // Para el led verde
+
+  // Recordar que el tiempo está expresado en milisegundos, 1 segundo son 1000
+  // En este caso vamos a utilizar el mismo tiempo para los dos semáforos
+  int tiempo_rojo = 6000;  // Para indicar cuantos segundos estara el semaforo en rojo, 
+  int tiempo_amarillo = 2000;  // Para indicar cuantos segundos estara el semaforo en amarillo
+  int tiempo_verde = 8000;  // Para indicar cuantos segundos estara el semaforo en verde
+
+
+void setup() {
+  // Declaramos los pines que vamos a utilizar y el tipo que van a tener dichos pines
+  // SEMAFORO 1
+  pinMode(semaforo1_rojo, OUTPUT);        // Led Rojo semaforo 1
+  pinMode(semaforo1_amarillo, OUTPUT);    // Led Amarillo semaforo 1
+  pinMode(semaforo1_verde, OUTPUT);       // Led Verde semaforo 1
+  // SEMAFORO 2
+  pinMode(semaforo2_rojo, OUTPUT);        // Led Rojo semaforo 2
+  pinMode(semaforo2_amarillo, OUTPUT);    // Led Amarillo semaforo 2
+  pinMode(semaforo2_verde, OUTPUT);       // Led Verde semaforo 2
+
+  // INICIAMOS LOS SEMAFOROS EN ROJO
+  digitalWrite(semaforo1_rojo,HIGH);      //encendemos el led rojo del semáforo 1
+  digitalWrite(semaforo2_rojo,HIGH);      //encendemos el led rojo del semáforo 2
+  delay(5000);                            //esperamos 5 segundos para que los vehiculos se paren en los dos semáforos
+
+  digitalWrite(semaforo1_rojo,LOW);       //apagamos el rojo del semáforo 1 por que empezamos con dicho semáforo
+}
+
+void loop() {
+ 
+  // SECUENCIA PARA EL PRIMER SEMAFORO 
+    
+  digitalWrite(semaforo1_verde,HIGH);      //encendemos el led verde del semaforo 1
+  delay(tiempo_verde);                     //esperamos x segundos indicados para el verde
+  digitalWrite(semaforo1_verde,LOW);       //apagamos el led verde del semaforo 1
+  delay(500);                              //esperamos medio segundo
+
+  digitalWrite(semaforo1_amarillo,HIGH);   //encendemos el led amarillo del semaforo 1
+  delay(tiempo_amarillo);                  //esperamos x segundos indicados para el amarillo
+  digitalWrite(semaforo1_amarillo,LOW);    //apagamos el led amarillo del semaforo 1
+  delay(500);                              //esperamos medio segundo
+
+  digitalWrite(semaforo1_rojo,HIGH);       //encendemos el led rojo del semaforo 1
+  delay(tiempo_rojo);                      //esperamos x segundos indicados para el rojo
+
+  digitalWrite(semaforo2_rojo,LOW);        //apagamos el led rojo del semaforo 2
+
+  // SECUENCIA PARA EL SEGUNDO SEMAFORO 
+ 
+  digitalWrite(semaforo2_verde,HIGH);      //encendemos el led verde del semaforo 2
+  delay(tiempo_verde);                     //esperamos x segundos indicados para el verde
+  digitalWrite(semaforo2_verde,LOW);       //apagamos el led verde del semaforo 2
+  delay(500);                              //esperamos medio segundo
+
+  digitalWrite(semaforo2_amarillo,HIGH);   //encendemos el led amarillo del semaforo 2
+  delay(tiempo_amarillo);                  //esperamos x segundos indicados para el amarillo
+  digitalWrite(semaforo2_amarillo,LOW);    //apagamos el led amarillo del semaforo 2
+  delay(500);                              //esperamos medio segundo
+
+  digitalWrite(semaforo2_rojo,HIGH);       //encendemos el led rojo del semaforo 2
+  delay(tiempo_rojo);                      //esperamos x segundos indicados para el rojo
+
+  digitalWrite(semaforo1_rojo,LOW);        //apagamos el led rojo del semaforo 1
+
+}
