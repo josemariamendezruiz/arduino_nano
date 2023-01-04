@@ -1,0 +1,77 @@
+/*
+    ENCEDIDO Y APAGADO DE LEDS 
+    AUTOR : JOSE MARIA MENDEZ RUIZ
+    ENERO 2023
+    CODIGO LIBRE PARA UTILIZAR COMO QUIERAS
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+    // DECLARAMOS LAS VARIABLES QUE INDICAN LOS PINES QUE VAMOS A UTILIZAR
+  int pin =  2;           // Para el pin que controlará el led que vamos a enceder
+  int esperar = 1000;     // Para indicar cuanto tiempo estará el led encendido
+
+void setup() {
+  
+  // Declaramos los pines que vamos a utilizar y el tipo que van a tener dichos pines
+  pinMode(pin, OUTPUT);        // Para declarar el tipo de pin para el led 1
+  pin++;		       // Para el siguiende led
+  pinMode(pin, OUTPUT);        // Para declarar el tipo de pin para el led 2
+  pin++;		       // Para el siguiende led
+  pinMode(pin, OUTPUT);        // Para declarar el tipo de pin para el led 3
+  pin++;		       // Para el siguiende led
+  pinMode(pin, OUTPUT);        // Para declarar el tipo de pin para el led 4
+  pin++;		       // Para el siguiende led
+  pinMode(pin, OUTPUT);        // Para declarar el tipo de pin para el led 5
+  pin++;		       // Para el siguiende led
+  pinMode(pin, OUTPUT);        // Para declarar el tipo de pin para el led 6
+  pin++;		       // Para el siguiende led
+  pinMode(pin, OUTPUT);        // Para declarar el tipo de pin para el led 7
+  pin++;		       // Para el siguiende led
+  pinMode(pin, OUTPUT);        // Para declarar el tipo de pin para el led 8
+  pin++;		       // Para el siguiende led
+  pinMode(pin, OUTPUT);        // Para declarar el tipo de pin para el led 9
+  pin = 2; // ponemos de nuevo la variable a 2, que es el primer pin que usamos del nano
+  
+  digitalWrite(pin,LOW);       //apagamos las salida para inicializar el led 1
+  pin++;		       // Para el siguiende led
+  digitalWrite(pin,LOW);       //apagamos las salida para inicializar el led 2
+  pin++;		       // Para el siguiende led
+  digitalWrite(pin,LOW);       //apagamos las salida para inicializar el led 3
+  pin++;		       // Para el siguiende led
+  digitalWrite(pin,LOW);       //apagamos las salida para inicializar el led 4
+  pin++;		       // Para el siguiende led
+  digitalWrite(pin,LOW);       //apagamos las salida para inicializar el led 5
+  pin++;		       // Para el siguiende led
+  digitalWrite(pin,LOW);       //apagamos las salida para inicializar el led 6
+  pin++;		       // Para el siguiende led
+  digitalWrite(pin,LOW);       //apagamos las salida para inicializar el led 7
+  pin++;		       // Para el siguiende led
+  digitalWrite(pin,LOW);       //apagamos las salida para inicializar el led 8
+  pin++;		       // Para el siguiende led
+  digitalWrite(pin,LOW);       //apagamos las salida para inicializar el led 9
+  pin++;		       // Para el siguiende led
+  pin = 2; // ponemos de nuevo la variable a 2, que es el primer pin que usamos del nano
+}
+
+void loop() {
+  
+   digitalWrite(pin,HIGH);    // activamos el pin que controla el led , encendemos el led
+   delay(esperar);            // esperamos el tiempo indicado para pasar al siguiente led
+   digitalWrite(pin,LOW);     // apagamos el pin que controla el led, apagamos el led
+
+   pin++;  // contamos hacia delante sumando, restando el valor de la variable pin
+   if (pin == 11 ) { // cuando la variable llega a 11 empieza de nuevo dandole el valor 2 a la variable pin
+    pin = 2;  // recordemos que empezamos en el 2, el pin que controla el diodo 1 es el 2 del nano
+   }
+   
+}
